@@ -19,7 +19,7 @@ import storage from 'redux-persist/lib/storage'; //是 Redux Persist 使用的�
 import { PersistGate } from 'redux-persist/integration/react'; //用於包裹React，確認數據恢復後才渲染
 
 const persistConfig = { key: 'root', storage, version: 1 };
-const persistReducer = persistReducer(persistConfig, authReducer);
+const persistedReducer = persistReducer(persistConfig, authReducer);
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
@@ -34,7 +34,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null}>
+      <PersistGate loading={null} persistor={persistStore(store)}>
         <App />
       </PersistGate>
     </Provider>
