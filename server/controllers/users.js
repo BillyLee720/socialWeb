@@ -44,10 +44,11 @@ exports.addRemoveFriend = async (req, res) => {
     const user = await User.findById(id);
     const friend = await User.findById(friendId);
 
-    if (user.friends.includes()) {
+    if (user.friends.includes(friendId)) {
       user.friends = user.friends.filter((id) => id !== friendId);
       friend.friends = friend.friends.filter((id) => id !== id);
     } else {
+      console.log(friend);
       user.friends.push(friendId);
       friend.friends.push(id);
     }
@@ -71,6 +72,7 @@ exports.addRemoveFriend = async (req, res) => {
     );
     res.status(200).json(formattedFriends);
   } catch (err) {
+    console.log(err);
     res.status(404).json({ message: err.message });
   }
 };
