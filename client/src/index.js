@@ -17,6 +17,7 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; //是 Redux Persist 使用的儲存引擎，默認使用localStorage
 import { PersistGate } from 'redux-persist/integration/react'; //用於包裹React，確認數據恢復後才渲染
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const persistConfig = { key: 'root', storage, version: 1 };
 const persistedReducer = persistReducer(persistConfig, authReducer);
@@ -33,10 +34,12 @@ const store = configureStore({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistStore(store)}>
-        <App />
-      </PersistGate>
-    </Provider>
+    <GoogleOAuthProvider clientId="139156651460-0a90nruc7q9cdk2r4o94563aqmhr4p1h.apps.googleusercontent.com">
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistStore(store)}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );

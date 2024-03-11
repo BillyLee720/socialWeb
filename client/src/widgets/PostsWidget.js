@@ -54,7 +54,6 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           likes,
           comments,
         }) => {
-          // console.log(userId);
           return (
             <PostWidget
               key={_id}
