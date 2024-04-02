@@ -5,25 +5,25 @@ import { useNavigate } from 'react-router-dom';
 import { setFriends } from 'state';
 import FlexBetween from './FlexBetween';
 import UserImage from './UserImage';
+import { create } from '@mui/material/styles/createTransitions';
 
-const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
+const Friend = ({ friendId, name, subtitle, userPicturePath, createdAt }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
-  const friends = useSelector((state) => state.user.friends);
-
+  const friends = useSelector((state) => state.user.friends); //object
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
   const primaryDark = palette.primary.dark;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-  // console.log(friends);
 
-  const isFriend = Array.isArray(friends.friends)
-    ? friends.friends.find((friend) => friend._id === friendId)
+  const friendIds = friends.map((friend) => friend._id);
+  // console.log(friendIds);
+  const isFriend = Array.isArray(friendIds)
+    ? friendIds.includes(friendId)
     : false;
-
   const inPerson = friendId === _id;
 
   const patchFriend = async () => {
@@ -35,7 +35,6 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
         'Content-Type': 'application/json',
       }
     );
-    console.log(isFriend);
     const data = await response.json();
     dispatch(setFriends({ friends: data }));
   };
@@ -60,7 +59,13 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
             {name}
           </Typography>
           <Typography color={medium} fontSize="0.75rem">
-            {subtitle}
+            {createdAt ? (
+              <>
+                {createdAt} , {subtitle}
+              </>
+            ) : (
+              <>{subtitle}</>
+            )}
           </Typography>
         </Box>
       </FlexBetween>
