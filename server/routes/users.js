@@ -3,6 +3,7 @@ const {
   getUser,
   getUserFriends,
   addRemoveFriend,
+  changeName,
 } = require('../controllers/users.js');
 
 const { verifyToken } = require('../middleware/auth.js');

@@ -4,7 +4,7 @@ import {
   LocationOnOutlined,
   WorkOutlineOutlined,
 } from '@mui/icons-material';
-import { Box, Typography, Divider, useTheme } from '@mui/material';
+import { Box, Typography, Divider, useTheme, IconButton } from '@mui/material';
 import UserImage from 'components/UserImage';
 import FlexBetween from 'components/FlexBetween';
 import WidgetWrapper from 'components/WidgetWrapper';
@@ -47,12 +47,8 @@ const UserWidget = ({ userId, picturePath }) => {
   return (
     <WidgetWrapper>
       {/* FIRST ROW */}
-      <FlexBetween
-        gap="0.5rem"
-        pb="1.1rem"
-        onClick={() => navigate(`/profile/${userId}`)}
-      >
-        <FlexBetween gap="1rem">
+      <FlexBetween gap="0.5rem" pb="1.1rem">
+        <FlexBetween gap="1rem" onClick={() => navigate(`/profile/${userId}`)}>
           <UserImage image={picturePath} />
           <Box>
             <Typography
@@ -71,7 +67,9 @@ const UserWidget = ({ userId, picturePath }) => {
             <Typography color={medium}>{friends.length} friends</Typography>
           </Box>
         </FlexBetween>
-        <ManageAccountsOutlined />
+        <IconButton onClick={() => navigate('/userInfo')}>
+          <ManageAccountsOutlined />
+        </IconButton>
       </FlexBetween>
 
       <Divider />
@@ -117,7 +115,9 @@ const UserWidget = ({ userId, picturePath }) => {
               <Typography color={medium}>Social Network</Typography>
             </Box>
           </FlexBetween>
-          <EditOutlined sx={{ color: main }} />
+          <IconButton>
+            <EditOutlined sx={{ color: main }} />
+          </IconButton>
         </FlexBetween>
         <FlexBetween gap="1rem">
           <FlexBetween gap="1rem">
@@ -129,7 +129,9 @@ const UserWidget = ({ userId, picturePath }) => {
               <Typography color={medium}>Network Platform</Typography>
             </Box>
           </FlexBetween>
-          <EditOutlined sx={{ color: main }} />
+          <IconButton>
+            <EditOutlined sx={{ color: main }} />
+          </IconButton>
         </FlexBetween>
       </Box>
     </WidgetWrapper>

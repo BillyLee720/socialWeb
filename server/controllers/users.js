@@ -76,3 +76,54 @@ exports.addRemoveFriend = async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 };
+
+exports.changeUsername = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName } = req.body;
+    const updatedName = await User.findByIdAndUpdate(
+      id,
+      {
+        firstName: firstName,
+        lastName: lastName,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedName);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+exports.updateOccupation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { occupation } = req.body;
+    const updated = await User.findByIdAndUpdate(
+      id,
+      {
+        occupation: occupation,
+      },
+      { new: true }
+    );
+    res.status(200).json(updated);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+exports.updateLocation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { location } = req.body;
+    const updated = await User.findByIdAndUpdate(
+      id,
+      {
+        location: location,
+      },
+      { new: true }
+    );
+    res.status(200).json(updated);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};

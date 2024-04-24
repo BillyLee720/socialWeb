@@ -22,13 +22,14 @@ const Oauth = () => {
         );
         const data = await res.json();
         sendData(data);
+        // console.log(data);
       } catch (err) {
         console.log(err);
       }
     },
   });
   const sendData = async (values) => {
-    const response = await fetch(`http://localhost:3001/auth/oauth`, {
+    const response = await fetch(`http://localhost:3001/auth/oauth/google`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values),

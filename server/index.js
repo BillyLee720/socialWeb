@@ -10,6 +10,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
+const profileRoutes = require('./routes/profile');
 const { register } = require('./controllers/auth');
 const { createPost } = require('./controllers/posts');
 const { verifyToken } = require('./middleware/auth');
@@ -50,6 +51,7 @@ app.post('/posts', verifyToken, upload.single('picture'), createPost);
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
+app.use('/profile', profileRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
