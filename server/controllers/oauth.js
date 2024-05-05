@@ -35,7 +35,6 @@ exports.google = async (req, res) => {
       //add new platform
       const newPlatform = new Platform({
         userId: user._id,
-        email: email,
         google: sub,
       });
       const savePlatform = await newPlatform.save();

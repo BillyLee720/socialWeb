@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 /* READ */
 exports.getUser = async (req, res) => {
@@ -94,6 +96,29 @@ exports.changeUsername = async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 };
+exports.changePassword = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    const { password } = req.body;
+    const isSamePassword = await bcrypt.compare(password, user.password);
+    if (isSamePassword)
+      return res.status(400).json({ message: 'Password is same' });
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+    const result = await User.findByIdAndUpdate(
+      id,
+      {
+        password: passwordHash,
+      },
+      { new: true }
+    );
+    res.status(200).json(result);
+    // console.log(isSamePassword, password, passwordHash);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
 
 exports.updateOccupation = async (req, res) => {
   try {
@@ -123,6 +148,41 @@ exports.updateLocation = async (req, res) => {
       { new: true }
     );
     res.status(200).json(updated);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+exports.changeIcon = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { picturePath } = req.body;
+    const updateNewPicture = await User.findByIdAndUpdate(
+      id,
+      {
+        picturePath: picturePath,
+      },
+      { new: true }
+    );
+    res.status(200).json(updateNewPicture);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+/* DELETE */
+exports.deleteIcon = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleteIcon = await User.findByIdAndUpdate(
+      id,
+      {
+        picturePath:
+          'https://i0.wp.com/digitalhealthskills.com/wp-content/uploads/2022/11/3da39-no-user-image-icon-27.png?fit=500%2C500&ssl=1',
+      },
+      { new: true }
+    );
+    res.status(200).json(deleteIcon);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }

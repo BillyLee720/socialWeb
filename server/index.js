@@ -13,6 +13,7 @@ const postRoutes = require('./routes/posts');
 const profileRoutes = require('./routes/profile');
 const { register } = require('./controllers/auth');
 const { createPost } = require('./controllers/posts');
+const { changeIcon } = require('./controllers/users');
 const { verifyToken } = require('./middleware/auth');
 const User = require('./models/User');
 const Post = require('./models/Post');
@@ -32,6 +33,13 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 
+/* TEST */
+app.get('/test', (req, res) => {
+  res.json({
+    message: 'test work',
+  });
+});
+
 /*FileStorage */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -46,6 +54,12 @@ const upload = multer({ storage });
 /* ROUTES WITH FILES */
 app.post('/auth/register', upload.single('picture'), register);
 app.post('/posts', verifyToken, upload.single('picture'), createPost);
+app.patch(
+  '/profile/:id/icon',
+  verifyToken,
+  upload.single('picture'),
+  changeIcon
+);
 
 /* ROUTES */
 app.use('/auth', authRoutes);

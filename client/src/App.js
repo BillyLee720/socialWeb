@@ -5,6 +5,7 @@ import ProfilePage from 'Pages/profilePage/profile';
 import InfoPage from 'Pages/editPage/UserInfo';
 import EditName from 'Pages/editPage/Name';
 import Navbar from 'Pages/navbar/navbar';
+import ChangePassword from 'Pages/editPage/Password';
 import EditLocation from 'Pages/editPage/Location';
 import EditOccupation from 'Pages/editPage/Occupation';
 import { useMemo } from 'react';
@@ -47,6 +48,10 @@ function App() {
             <Route
               path="/profile/location"
               element={isAuth ? <EditLocation /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/profile/password"
+              element={isAuth ? <ChangePassword /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>

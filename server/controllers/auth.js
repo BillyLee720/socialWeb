@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Platform = require('../models/Platform');
 /* REGISTER USER */
 
 exports.register = async (req, res) => {
@@ -35,7 +36,9 @@ exports.register = async (req, res) => {
       viewedProfile: Math.floor(Math.random() * 10000),
       impressions: Math.floor(Math.random() * 10000),
     });
+
     const saveUser = await newUser.save();
+
     res.status(201).json(saveUser);
   } catch (err) {
     res.status(500).json({ error: err.message });
