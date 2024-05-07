@@ -20,7 +20,7 @@ import FlexBetween from 'components/FlexBetween';
 import UserImage from 'components/UserImage';
 import Navbar from 'Pages/navbar/navbar';
 import Dropzone from 'react-dropzone';
-import { setProfile } from 'state';
+import { setProfile, setPosts } from 'state';
 
 //Typography為呈現文字的元件
 
@@ -56,40 +56,52 @@ const InfoPage = () => {
     event.preventDefault();
     const formData = new FormData();
     formData.append('picture', pictureValue);
-    formData.append('picturePath', pictureValue.name);
+    // formData.append('picturePath', pictureValue.name);
 
-    const response = await fetch(`http://localhost:3001/profile/${_id}/icon`, {
-      method: 'PATCH',
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `http://localhost:3001/profile/${_id}/avatar`,
+      {
+        method: 'PATCH',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const res = await response.json();
     console.log(res);
     if (res) {
       dispatch(
         setProfile({
-          user: res,
+          user: res.user,
+        }),
+        setPosts({
+          posts: res.posts,
         })
       );
       navigate('/home');
     }
   };
   const removeIcon = async () => {
-    const response = await fetch(`http://localhost:3001/profile/${_id}/icon`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `http://localhost:3001/profile/${_id}/avatar`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     const res = await response.json();
     console.log(res);
     if (res) {
       dispatch(
         setProfile({
-          user: res,
+          user: res.user,
+        }),
+        setPosts({
+          posts: res.posts,
         })
       );
       navigate('/home');

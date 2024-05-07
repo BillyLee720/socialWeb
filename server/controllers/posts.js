@@ -4,7 +4,9 @@ const Post = require('../models/Post');
 /* CREATE */
 exports.createPost = async (req, res) => {
   try {
-    const { userId, description, picturePath } = req.body;
+    const { userId, description } = req.body;
+    const { imagePath } = req;
+
     const user = await User.findById(userId);
     const newPost = new Post({
       userId,
@@ -13,7 +15,7 @@ exports.createPost = async (req, res) => {
       location: user.location,
       description,
       userPicturePath: user.picturePath,
-      picturePath,
+      picturePath: imagePath,
       likes: {},
       comments: [],
     });

@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Post = require('../models/Post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -91,7 +92,16 @@ exports.changeUsername = async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).json(updatedName);
+    const updateUserPost = await Post.updateMany(
+      { userId: id },
+      {
+        firstName: firstName,
+        lastName: lastName,
+      },
+      { new: true }
+    );
+    const updatedPosts = await Post.find().sort({ createdAt: -1 });
+    res.status(200).json({ user: updatedName, posts: updatedPosts });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
@@ -140,49 +150,74 @@ exports.updateLocation = async (req, res) => {
   try {
     const { id } = req.params;
     const { location } = req.body;
-    const updated = await User.findByIdAndUpdate(
+    const updateLocation = await User.findByIdAndUpdate(
       id,
       {
         location: location,
       },
       { new: true }
     );
-    res.status(200).json(updated);
+    const updateUserPost = await Post.updateMany(
+      { userId: id },
+      {
+        location: location,
+      },
+      { new: true }
+    );
+    const updatedPosts = await Post.find().sort({ createdAt: -1 });
+    res.status(200).json({ user: updateLocation, posts: updatedPosts });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
 };
-exports.changeIcon = async (req, res) => {
+exports.changeAvatar = async (req, res) => {
   try {
     const { id } = req.params;
-    const { picturePath } = req.body;
-    const updateNewPicture = await User.findByIdAndUpdate(
+    const { imagePath } = req;
+    const updatedAvatar = await User.findByIdAndUpdate(
       id,
       {
-        picturePath: picturePath,
+        picturePath: imagePath,
       },
       { new: true }
     );
-    res.status(200).json(updateNewPicture);
+
+    const updateUserPost = await Post.updateMany(
+      { userId: id },
+      {
+        userPicturePath: imagePath,
+      },
+      { new: true }
+    );
+    const updatedPosts = await Post.find().sort({ createdAt: -1 });
+    res.status(200).json({ user: updatedAvatar, posts: updatedPosts });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
 };
 
 /* DELETE */
-exports.deleteIcon = async (req, res) => {
+exports.deleteAvatar = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const deleteIcon = await User.findByIdAndUpdate(
+    const noAvatar =
+      'https://i0.wp.com/digitalhealthskills.com/wp-content/uploads/2022/11/3da39-no-user-image-icon-27.png?fit=500%2C500&ssl=1';
+    const deleteAvatar = await User.findByIdAndUpdate(
       id,
       {
-        picturePath:
-          'https://i0.wp.com/digitalhealthskills.com/wp-content/uploads/2022/11/3da39-no-user-image-icon-27.png?fit=500%2C500&ssl=1',
+        picturePath: noAvatar,
       },
       { new: true }
     );
-    res.status(200).json(deleteIcon);
+    const updateUserPost = await Post.updateMany(
+      { userId: id },
+      {
+        userPicturePath: noAvatar,
+      },
+      { new: true }
+    );
+    const updatedPosts = await Post.find().sort({ createdAt: -1 });
+    res.status(200).json({ user: deleteAvatar, posts: updatedPosts });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }

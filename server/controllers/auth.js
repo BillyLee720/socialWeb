@@ -11,11 +11,12 @@ exports.register = async (req, res) => {
       lastName,
       email,
       password,
-      picturePath,
       friends,
       location,
       occupation,
     } = req.body;
+    const { imagePath } = req;
+
     //檢查email
     const existEmail = await User.findOne({ email: email });
     if (existEmail) {
@@ -29,7 +30,7 @@ exports.register = async (req, res) => {
       lastName,
       email,
       password: passwordHash,
-      picturePath,
+      picturePath: imagePath,
       friends,
       location,
       occupation,

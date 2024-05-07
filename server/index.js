@@ -13,11 +13,12 @@ const postRoutes = require('./routes/posts');
 const profileRoutes = require('./routes/profile');
 const { register } = require('./controllers/auth');
 const { createPost } = require('./controllers/posts');
-const { changeIcon } = require('./controllers/users');
+const { changeAvatar } = require('./controllers/users');
 const { verifyToken } = require('./middleware/auth');
 const User = require('./models/User');
 const Post = require('./models/Post');
 const { users, posts } = require('./data/index');
+const { ImgurClient } = require('imgur');
 /* CONFIGURATIONS */
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -41,24 +42,72 @@ app.get('/test', (req, res) => {
 });
 
 /*FileStorage */
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/assets');
-  },
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'public/assets');
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.originalname);
+//   },
+// });
+// const upload = multer({ storage });
+
+/* Imgur */
+const upload = multer({
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    const uniquename = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniquename + path.extname(file.originalname));
   },
 });
-const upload = multer({ storage });
 
-/* ROUTES WITH FILES */
-app.post('/auth/register', upload.single('picture'), register);
-app.post('/posts', verifyToken, upload.single('picture'), createPost);
-app.patch(
-  '/profile/:id/icon',
+/* ROUTES WITH FILES TO LOCAL */
+// app.post('/auth/register', upload.single('picture'), register);
+// app.post('/posts', verifyToken, upload.single('picture'), createPost);
+// app.patch(
+//   '/profile/:id/avatar',
+//   verifyToken,
+//   upload.single('picture'),
+//   changeAvatar
+// );
+
+/* ROUTES WITH FILES TO IMGUR */
+const uploadToImgur = async (req, res, next) => {
+  try {
+    const client = new ImgurClient({
+      clientId: process.env.IMGUR_CLIENT_ID,
+      clientSecret: process.env.IMGUR_CLIENT_SECRET,
+      refreshToken: process.env.IMGUR_REFRESH_TOKEN,
+    });
+    const imageBase64 = req.file.buffer.toString('base64');
+    const response = await client.upload({
+      image: imageBase64,
+      type: 'base64',
+      album: process.env.IMGUR_ALBUM_ID,
+    });
+    // res.send({ url: response.data.link });
+    console.log(response.data);
+    req.imagePath = response.data.link;
+    next();
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+app.post('/avatar', upload.single('picture'), uploadToImgur);
+
+app.post('/auth/register', upload.single('picture'), uploadToImgur, register);
+app.post(
+  '/posts',
   verifyToken,
   upload.single('picture'),
-  changeIcon
+  uploadToImgur,
+  createPost
+);
+app.patch(
+  '/profile/:id/avatar',
+  verifyToken,
+  upload.single('picture'),
+  uploadToImgur,
+  changeAvatar
 );
 
 /* ROUTES */

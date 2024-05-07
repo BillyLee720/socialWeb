@@ -17,7 +17,7 @@ import FlexBetween from 'components/FlexBetween';
 import UserImage from 'components/UserImage';
 import Navbar from 'Pages/navbar/navbar';
 import * as yup from 'yup';
-import { setProfile } from 'state';
+import { setProfile, setPosts } from 'state';
 
 //Typography為呈現文字的元件
 
@@ -54,10 +54,14 @@ const EditNamePage = () => {
       },
     });
     const res = await response.json();
+    console.log(res);
     if (res) {
       dispatch(
         setProfile({
-          user: res,
+          user: res.user,
+        }),
+        setPosts({
+          posts: res.posts,
         })
       );
       navigate('/home');
