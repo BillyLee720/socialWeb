@@ -32,6 +32,7 @@ const InfoPage = () => {
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
   const { _id } = useSelector((state) => state.user);
+  const apiUrl = useSelector((state) => state.host);
 
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
@@ -107,6 +108,17 @@ const InfoPage = () => {
       navigate('/home');
     }
   };
+
+  const getLink = async () => {
+    const platform = await fetch(`${apiUrl}/${_id}/link`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  };
+
+  useEffect(() => {
+    getLink();
+  }, []);
   return (
     <Box>
       <Navbar />
@@ -278,7 +290,7 @@ const InfoPage = () => {
           <Typography fontWeight="500" variant="h3" sx={{ mb: '1.5rem' }}>
             Platform
           </Typography>
-          {/* Twitter */}
+          {/* Google */}
           <Box
             onClick={() => {
               navigate(`/profile/`);

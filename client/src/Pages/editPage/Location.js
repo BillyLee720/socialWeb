@@ -53,7 +53,7 @@ const LocationPage = () => {
       navigate(`/userInfo`);
     } else {
       const response = await fetch(
-        `http://localhost:3001/profile/${_id}/location`,
+        `${process.env.OnlineSever}/profile/${_id}/location`,
         {
           method: 'PATCH',
           body: JSON.stringify(data),

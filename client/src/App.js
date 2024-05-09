@@ -9,15 +9,30 @@ import ChangePassword from 'Pages/editPage/Password';
 import EditLocation from 'Pages/editPage/Location';
 import EditOccupation from 'Pages/editPage/Occupation';
 import { useMemo } from 'react';
-import { UseSelector, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { themeSettings } from './theme';
+import { setHost } from 'state';
+import { useEffect } from 'react';
 
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector((state) => state.token));
+  const host = useSelector((state) => state.host);
+  const dispatch = useDispatch();
+
+  const isLocalhost =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1';
+  const ServerUrl = isLocalhost
+    ? 'http://localhost:3001'
+    : process.env.OnlineServer;
+
+  useEffect(() => {
+    dispatch(setHost({ host: ServerUrl }));
+  }, []);
   return (
     <div className="app">
       <BrowserRouter>
