@@ -1,7 +1,26 @@
 import { Box } from '@mui/material';
 
-const UserImage = ({ image, size = '60px', apiUrl }) => {
+const UserImage = ({ image, size = '60px', url }) => {
   const isLocalPath = image && !image.startsWith('http');
+  const web = process.env.NODE_ENV;
+  let imageUrl = '';
+
+  if (web === 'development') {
+    //local內部資料夾
+    if (image && !image.startsWith('http')) {
+      imageUrl = `${url}/assets/${image}`;
+    } else {
+      //local 外部來源
+      imageUrl = image;
+    }
+  } else {
+    // Production端內部
+    if (image && !image.startsWith('http')) {
+      imageUrl = `${url}/assets/${image}`;
+    } else {
+      imageUrl = `${image}`;
+    }
+  }
   return (
     <Box width={size} height={size}>
       <img
@@ -9,7 +28,7 @@ const UserImage = ({ image, size = '60px', apiUrl }) => {
         width={size}
         height={size}
         alt="user"
-        src={isLocalPath ? `${apiUrl}/assets/${image}` : image}
+        src={imageUrl}
       />
     </Box>
   );
