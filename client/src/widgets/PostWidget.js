@@ -29,6 +29,8 @@ const PostWidget = ({
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
+  const apiUrl = useSelector((state) => state.host);
+
   const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
   const { palette } = useTheme();
@@ -39,7 +41,7 @@ const PostWidget = ({
     addSuffix: false,
   });
   const patchLike = async () => {
-    const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
+    const response = await fetch(`${apiUrl}/posts/${postId}/like`, {
       method: 'PATCH',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -68,11 +70,7 @@ const PostWidget = ({
           height="auto"
           alt="post"
           style={{ borderRadius: '0.75rem', marginTop: '0.75rem' }}
-          src={
-            isLocalPath
-              ? `http://localhost:3001/assets/${picturePath}`
-              : picturePath
-          }
+          src={isLocalPath ? `${apiUrl}/assets/${picturePath}` : picturePath}
         />
       )}
       <FlexBetween mt="0.25rem">

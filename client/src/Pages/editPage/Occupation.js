@@ -9,12 +9,9 @@ import {
   Divider,
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
-import FlexBetween from 'components/FlexBetween';
-import UserImage from 'components/UserImage';
 import Navbar from 'Pages/navbar/navbar';
 import * as yup from 'yup';
 import { setProfile } from 'state';
@@ -34,6 +31,7 @@ const OccupationPage = () => {
   const user = useSelector((state) => state.user);
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
+  const apiUrl = useSelector((state) => state.host);
 
   const initialValuesOccupation = {
     occupation: user.occupation === null ? '' : `${user.occupation}`,
@@ -52,17 +50,14 @@ const OccupationPage = () => {
     if (sameData) {
       navigate(`/userInfo`);
     } else {
-      const response = await fetch(
-        `http://localhost:3001/profile/${_id}/occupation`,
-        {
-          method: 'PATCH',
-          body: JSON.stringify(data),
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const response = await fetch(`${apiUrl}/profile/${_id}/occupation`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
       const res = await response.json();
       console.log(res);
       if (res) {

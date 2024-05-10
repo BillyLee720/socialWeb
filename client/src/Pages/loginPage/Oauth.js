@@ -1,13 +1,15 @@
 import React from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLogin } from 'state';
 import jwt_Decode from 'jwt-decode';
 
 const Oauth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const apiUrl = useSelector((state) => state.host);
+
   const googleLogin = useGoogleLogin({
     onSuccess: async (response) => {
       try {
@@ -22,14 +24,13 @@ const Oauth = () => {
         );
         const data = await res.json();
         sendData(data);
-        // console.log(data);
       } catch (err) {
         console.log(err);
       }
     },
   });
   const sendData = async (values) => {
-    const response = await fetch(`http://localhost:3001/auth/oauth/google`, {
+    const response = await fetch(`${apiUrl}/auth/oauth/google`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(values),

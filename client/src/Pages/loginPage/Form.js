@@ -11,7 +11,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLogin } from 'state';
 import Dropzone from 'react-dropzone';
 import FlexBetween from 'components/FlexBetween';
@@ -53,6 +53,8 @@ const Form = () => {
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery('(min-width: 600px)');
 
+  const apiUrl = useSelector((state) => state.host);
+
   const isLogin = pageType === 'login';
   const isRegister = pageType === 'register';
 
@@ -62,13 +64,10 @@ const Form = () => {
       formData.append(value, values[value]);
     }
     formData.append('picturePath', values.picture.name);
-    const savedUserResponse = await fetch(
-      'http://localhost:3001/auth/register',
-      {
-        method: 'POST',
-        body: formData,
-      }
-    );
+    const savedUserResponse = await fetch(`${apiUrl}/auth/register`, {
+      method: 'POST',
+      body: formData,
+    });
     const savedUser = await savedUserResponse.json();
     onSubmitProps.resetForm();
 
@@ -77,14 +76,11 @@ const Form = () => {
     }
   };
   const login = async (values, onSubmitProps) => {
-    const loggedInUserResponse = await fetch(
-      'http://localhost:3001/auth/login',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
-      }
-    );
+    const loggedInUserResponse = await fetch(`${apiUrl}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+    });
     const loggedIn = await loggedInUserResponse.json();
     onSubmitProps.resetForm();
     if (loggedIn) {

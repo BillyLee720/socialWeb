@@ -9,13 +9,9 @@ import {
   Divider,
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
-import FlexBetween from 'components/FlexBetween';
-import UserImage from 'components/UserImage';
-import Navbar from 'Pages/navbar/navbar';
 import * as yup from 'yup';
 import { setProfile, setPosts } from 'state';
 
@@ -34,6 +30,7 @@ const EditNamePage = () => {
   const user = useSelector((state) => state.user);
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
+  const apiUrl = useSelector((state) => state.host);
 
   const initialValuesName = {
     firstName: `${user.firstName}`,
@@ -45,7 +42,7 @@ const EditNamePage = () => {
   });
 
   const handleFormSubmit = async (data) => {
-    const response = await fetch(`http://localhost:3001/profile/${_id}/name`, {
+    const response = await fetch(`${apiUrl}/profile/${_id}/name`, {
       method: 'PATCH',
       body: JSON.stringify(data),
       headers: {

@@ -33,6 +33,8 @@ const MyPostWidget = ({ picturePath }) => {
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
+  const apiUrl = useSelector((state) => state.host);
+
   const isNonMobileScreens = useMediaQuery('(min-width:1000px)');
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
@@ -45,7 +47,7 @@ const MyPostWidget = ({ picturePath }) => {
       formData.append('picture', image);
       formData.append('picturePath', image.name);
     }
-    const response = await fetch(`http://localhost:3001/posts`, {
+    const response = await fetch(`${apiUrl}/posts`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
@@ -59,7 +61,7 @@ const MyPostWidget = ({ picturePath }) => {
   return (
     <WidgetWrapper>
       <FlexBetween gap="1.5rem">
-        <UserImage image={picturePath} />
+        <UserImage image={picturePath} apiUrl={apiUrl} />
         <InputBase
           placeholder="What's on your mind..."
           onChange={(e) => setPost(e.target.value)}

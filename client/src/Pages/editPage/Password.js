@@ -10,12 +10,10 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { ArrowBack, Visibility, VisibilityOff } from '@mui/icons-material';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
-import FlexBetween from 'components/FlexBetween';
-import UserImage from 'components/UserImage';
 import Navbar from 'Pages/navbar/navbar';
 import * as yup from 'yup';
 import { setProfile } from 'state';
@@ -34,6 +32,7 @@ const PasswordPage = () => {
 
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
+  const apiUrl = useSelector((state) => state.host);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -51,17 +50,14 @@ const PasswordPage = () => {
   const handleFormSubmit = async (data, { setErrors }) => {
     const passwordConfirm = data.password === data.confirmPassword;
     if (passwordConfirm) {
-      const response = await fetch(
-        `http://localhost:3001/profile/${_id}/password`,
-        {
-          method: 'PATCH',
-          body: JSON.stringify(data),
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const response = await fetch(`${apiUrl}/profile/${_id}/password`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
       const res = await response.json();
       console.log(res);
       if (res) {

@@ -29,6 +29,8 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, createdAt }) => {
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const friends = useSelector((state) => state.user.friends); //object
+  const apiUrl = useSelector((state) => state.host);
+
   const { palette } = useTheme();
   const primaryLight = palette.primary.light;
   const primaryDark = palette.primary.dark;
@@ -51,21 +53,18 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, createdAt }) => {
     setAnchorEl(null);
   };
   const patchFriend = async () => {
-    const response = await fetch(
-      `http://localhost:3001/users/${_id}/${friendId}`,
-      {
-        method: 'PATCH',
-        headers: { Authorization: `Bearer ${token}` },
-        'Content-Type': 'application/json',
-      }
-    );
+    const response = await fetch(`${apiUrl}/users/${_id}/${friendId}`, {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${token}` },
+      'Content-Type': 'application/json',
+    });
     const data = await response.json();
     dispatch(setFriends({ friends: data }));
   };
   return (
     <FlexBetween>
       <FlexBetween gap="1rem">
-        <UserImage image={userPicturePath} size="55px" />
+        <UserImage image={userPicturePath} url={apiUrl} size="55px" />
         <Box
           onClick={() => {
             navigate(`/profile/${friendId}`);

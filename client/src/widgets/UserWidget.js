@@ -8,7 +8,7 @@ import { Box, Typography, Divider, useTheme, IconButton } from '@mui/material';
 import UserImage from 'components/UserImage';
 import FlexBetween from 'components/FlexBetween';
 import WidgetWrapper from 'components/WidgetWrapper';
-import { UseSelector, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,12 +17,14 @@ const UserWidget = ({ userId, picturePath }) => {
   const { palette } = useTheme();
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
+  const apiUrl = useSelector((state) => state.host);
+
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
   const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/users/${userId}`, {
+    const response = await fetch(`${apiUrl}/users/${userId}`, {
       method: 'GET',
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -49,7 +51,7 @@ const UserWidget = ({ userId, picturePath }) => {
       {/* FIRST ROW */}
       <FlexBetween gap="0.5rem" pb="1.1rem">
         <FlexBetween gap="1rem" onClick={() => navigate(`/profile/${userId}`)}>
-          <UserImage image={picturePath} />
+          <UserImage image={picturePath} apiUrl={apiUrl} />
           <Box>
             <Typography
               variant="h4"

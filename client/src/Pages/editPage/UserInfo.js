@@ -59,16 +59,13 @@ const InfoPage = () => {
     formData.append('picture', pictureValue);
     // formData.append('picturePath', pictureValue.name);
 
-    const response = await fetch(
-      `http://localhost:3001/profile/${_id}/avatar`,
-      {
-        method: 'PATCH',
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${apiUrl}/profile/${_id}/avatar`, {
+      method: 'PATCH',
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const res = await response.json();
     console.log(res);
     if (res) {
@@ -84,16 +81,13 @@ const InfoPage = () => {
     }
   };
   const removeIcon = async () => {
-    const response = await fetch(
-      `http://localhost:3001/profile/${_id}/avatar`,
-      {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(`${apiUrl}/profile/${_id}/avatar`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
     const res = await response.json();
     console.log(res);
     if (res) {
@@ -153,7 +147,7 @@ const InfoPage = () => {
                 </Typography>
                 <Typography color={main}>Change Your Icon</Typography>
               </FlexBetween>
-              <UserImage image={user.picturePath} />
+              <UserImage image={user.picturePath} apiUrl={apiUrl} />
             </FlexBetween>
           </Box>
           <Divider />
@@ -396,7 +390,7 @@ const InfoPage = () => {
               <Typography>
                 Use bottom to change your profile picture or remove
               </Typography>
-              <UserImage image={user.picturePath} />
+              <UserImage image={user.picturePath} apiUrl={apiUrl} />
             </DialogContent>
             <DialogActions>
               <FlexBetween>

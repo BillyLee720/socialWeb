@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-const UserImage = ({ image, size = '60px' }) => {
+const UserImage = ({ image, size = '60px', apiUrl }) => {
   const isLocalPath = image && !image.startsWith('http');
   return (
     <Box width={size} height={size}>
@@ -9,7 +9,7 @@ const UserImage = ({ image, size = '60px' }) => {
         width={size}
         height={size}
         alt="user"
-        src={isLocalPath ? `http://localhost:3001/assets/${image}` : image}
+        src={isLocalPath ? `${apiUrl}/assets/${image}` : image}
       />
     </Box>
   );
