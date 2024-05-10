@@ -28,10 +28,10 @@ function App() {
     window.location.hostname === '127.0.0.1';
   const ServerUrl = isLocalhost
     ? 'http://localhost:3001'
-    : process.env.OnlineServer;
+    : process.env.REACT_APP_SERVER;
 
+  console.log(process.env.NODE_ENV);
   useEffect(() => {
-    console.log(window.location.hostname);
     dispatch(setHost({ host: ServerUrl }));
   }, []);
   return (
