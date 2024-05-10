@@ -23,15 +23,14 @@ function App() {
   const host = useSelector((state) => state.host);
   const dispatch = useDispatch();
 
-  const isLocalhost =
-    window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1';
-  const ServerUrl = isLocalhost
-    ? 'http://localhost:3001'
-    : process.env.REACT_APP_SERVER;
+  const web = process.env.NODE_ENV;
 
-  console.log(process.env.NODE_ENV);
+  const ServerUrl =
+    web === 'development' ? 'http://localhost:3001' : process.env.REACT_APP_URL;
+
   useEffect(() => {
+    console.log(process.env.NODE_ENV);
+
     dispatch(setHost({ host: ServerUrl }));
   }, []);
   return (

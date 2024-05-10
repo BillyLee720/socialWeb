@@ -103,16 +103,16 @@ const InfoPage = () => {
     }
   };
 
-  const getLink = async () => {
-    const platform = await fetch(`${apiUrl}/${_id}/link`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${token}` },
-    });
-  };
+  // const getLink = async () => {
+  //   const platform = await fetch(`${apiUrl}/${_id}/link`, {
+  //     method: 'GET',
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   });
+  // };
 
-  useEffect(() => {
-    getLink();
-  }, []);
+  // useEffect(() => {
+  //   getLink();
+  // }, []);
   return (
     <Box>
       <Navbar />
