@@ -12,6 +12,7 @@ import { ArrowBack } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
+import Navbar from 'Pages/navbar/navbar';
 import * as yup from 'yup';
 import { setProfile, setPosts } from 'state';
 
