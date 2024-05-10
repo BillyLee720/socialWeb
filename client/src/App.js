@@ -31,7 +31,7 @@ function App() {
     : process.env.OnlineServer;
 
   useEffect(() => {
-    console.log(ServerUrl);
+    console.log(window.location.hostname);
     dispatch(setHost({ host: ServerUrl }));
   }, []);
   return (
