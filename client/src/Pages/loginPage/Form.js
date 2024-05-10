@@ -76,6 +76,7 @@ const Form = () => {
     }
   };
   const login = async (values, onSubmitProps) => {
+    console.log(apiUrl);
     const loggedInUserResponse = await fetch(`${apiUrl}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
