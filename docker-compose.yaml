@@ -22,8 +22,8 @@ services:
     volumes:
     - ./server:/myapp
     - /myapp/node_modules
-    expose:
-    - 3001
+    ports:
+      - "3001:3001"
     env_file:
       - ./server/.env
     restart: always

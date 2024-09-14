@@ -1,27 +1,12 @@
-import {
-  PersonAddOutlined,
-  PersonRemoveOutlined,
-  MoreHoriz,
-  Edit,
-  Delete,
-} from '@mui/icons-material';
-import {
-  Box,
-  IconButton,
-  Typography,
-  useTheme,
-  Menu,
-  MenuItem,
-  ListItemText,
-  ListItemIcon,
-} from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { setFriends } from 'state';
-import FlexBetween from './FlexBetween';
-import UserImage from './UserImage';
-import { create } from '@mui/material/styles/createTransitions';
-import React, { useState } from 'react';
+import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setFriends } from "state";
+import FlexBetween from "./FlexBetween";
+import UserImage from "./UserImage";
+import { create } from "@mui/material/styles/createTransitions";
+import React, { useState } from "react";
 
 const Friend = ({ friendId, name, subtitle, userPicturePath, createdAt }) => {
   const dispatch = useDispatch();
@@ -44,19 +29,11 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, createdAt }) => {
     : false;
   const inPerson = friendId === _id;
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const patchFriend = async () => {
     const response = await fetch(`${apiUrl}/users/${_id}/${friendId}`, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: { Authorization: `Bearer ${token}` },
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     });
     const data = await response.json();
     dispatch(setFriends({ friends: data }));
@@ -76,7 +53,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, createdAt }) => {
             variant="h5"
             fontWeight="500"
             sx={{
-              '&:hover': { color: palette.primary.light, cursor: 'pointer' },
+              "&:hover": { color: palette.primary.light, cursor: "pointer" },
             }}
           >
             {name}
@@ -92,10 +69,10 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, createdAt }) => {
           </Typography>
         </Box>
       </FlexBetween>
-      {!inPerson ? (
+      {!inPerson && (
         <IconButton
           onClick={() => patchFriend()}
-          sx={{ backgroundColor: primaryLight, p: '0.6rem' }}
+          sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
         >
           {isFriend ? (
             <PersonRemoveOutlined sx={{ color: primaryDark }} />
@@ -103,38 +80,6 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, createdAt }) => {
             <PersonAddOutlined sx={{ color: primaryDark }} />
           )}
         </IconButton>
-      ) : (
-        <>
-          <IconButton onClick={handleClick}>
-            <MoreHoriz />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <MenuItem>
-              <ListItemIcon disableRipple>
-                <Edit fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Edit Post</ListItemText>
-            </MenuItem>
-            <MenuItem disableRipple>
-              <ListItemIcon>
-                <Delete fontSize="small" />
-              </ListItemIcon>
-              <ListItemText> Delete</ListItemText>
-            </MenuItem>
-          </Menu>
-        </>
       )}
     </FlexBetween>
   );

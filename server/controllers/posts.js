@@ -1,5 +1,5 @@
-const User = require('../models/User');
-const Post = require('../models/Post');
+const User = require("../models/User");
+const Post = require("../models/Post");
 
 /* CREATE */
 exports.createPost = async (req, res) => {
@@ -65,6 +65,43 @@ exports.likePost = async (req, res) => {
       { new: true }
     );
     res.status(200).json(updatedPost);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+exports.editPost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { description } = req.body;
+
+    const post = await Post.findById(id);
+    if (!post) {
+      res.status(404).json({ error: "post not found" });
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      {
+        description: description,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+exports.deletePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findById(id);
+    if (!post) {
+      res.status(404).json({ error: "post not found" });
+    }
+
+    const deletedPost = await Post.findByIdAndDelete(id);
+    res.status(200).json({ message: "delete success" });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
