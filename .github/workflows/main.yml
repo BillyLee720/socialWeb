@@ -1,0 +1,35 @@
+ name: SocialWebCI
+
+# 觸發條件，當 push 到 main 分支或 pull request 時執行
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  client:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build
+      run: cd client && npm run build
+  
+  server:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+      
+    - name: Set up Node.js 20.11.0
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20.11.0'
+        
+    - name: Install package
+      run: cd server && npm install --legacy-peer-deps
+    - name: Test
+      run: cd server && npm start
