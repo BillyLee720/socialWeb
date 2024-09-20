@@ -1,6 +1,13 @@
  name: SocialWebCI
 
-on: [push]
+# 觸發條件，當 push 到 main 分支或 pull request 時執行
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   client:
@@ -25,4 +32,4 @@ jobs:
     - name: Install package
       run: cd server && npm install --legacy-peer-deps
     - name: Test
-      run: cd server && npm start
+      run: cd server && npm test
