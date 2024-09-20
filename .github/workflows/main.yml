@@ -1,6 +1,5 @@
  name: SocialWebCI
 
-# 觸發條件，當 push 到 main 分支或 pull request 時執行
 on:
   push:
     branches:
