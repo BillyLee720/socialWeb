@@ -1,20 +1,20 @@
-import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
-import HomePage from 'Pages/homePage/home';
-import LoginPage from 'Pages/loginPage/login';
-import ProfilePage from 'Pages/profilePage/profile';
-import InfoPage from 'Pages/editPage/UserInfo';
-import EditName from 'Pages/editPage/Name';
-import Navbar from 'Pages/navbar/navbar';
-import ChangePassword from 'Pages/editPage/Password';
-import EditLocation from 'Pages/editPage/Location';
-import EditOccupation from 'Pages/editPage/Occupation';
-import { useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
-import { themeSettings } from './theme';
-import { setHost } from 'state';
-import { useEffect } from 'react';
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import HomePage from "Pages/homePage/home";
+import LoginPage from "Pages/loginPage/login";
+import ProfilePage from "Pages/profilePage/profile";
+import InfoPage from "Pages/editPage/UserInfo";
+import EditName from "Pages/editPage/Name";
+import Navbar from "Pages/navbar/navbar";
+import ChangePassword from "Pages/editPage/Password";
+import EditLocation from "Pages/editPage/Location";
+import EditOccupation from "Pages/editPage/Occupation";
+import { useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { themeSettings } from "./theme";
+import { setHost } from "state";
+import { useEffect } from "react";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -26,7 +26,7 @@ function App() {
   const web = process.env.NODE_ENV;
 
   const ServerUrl =
-    web === 'development' ? 'http://localhost:3001' : process.env.REACT_APP_URL;
+    web === "development" ? "http://localhost:3001" : process.env.REACT_APP_URL;
 
   useEffect(() => {
     console.log(process.env.NODE_ENV);
@@ -39,7 +39,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route path="/" element={<LoginPage />} />
+            <Route path="/" element={isAuth ? <HomePage /> : <LoginPage />} />
             <Route
               path="/home"
               element={isAuth ? <HomePage /> : <Navigate to="/" />}
