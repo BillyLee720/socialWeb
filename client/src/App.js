@@ -8,6 +8,7 @@ import Navbar from "Pages/navbar/navbar";
 import ChangePassword from "Pages/editPage/Password";
 import EditLocation from "Pages/editPage/Location";
 import EditOccupation from "Pages/editPage/Occupation";
+import SearchPage from "Pages/searchPage/search";
 import { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -67,6 +68,10 @@ function App() {
             <Route
               path="/profile/password"
               element={isAuth ? <ChangePassword /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/search"
+              element={isAuth ? <SearchPage /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>

@@ -1,7 +1,7 @@
-const User = require('../models/User');
-const Post = require('../models/Post');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const User = require("../models/User");
+const Post = require("../models/Post");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 /* READ */
 exports.getUser = async (req, res) => {
@@ -37,6 +37,28 @@ exports.getUserFriends = async (req, res) => {
     res.status(200).json(formattedFriends);
   } catch (err) {
     res.status(404).json({ message: err.message });
+  }
+};
+exports.searchUser = async (req, res) => {
+  try {
+    const { content } = req.body;
+    console.log(content);
+    if (!content)
+      return res.status(400).json({ message: "Search content is empty" });
+
+    const users = await User.find({
+      $or: [
+        { firstName: { $regex: content, $options: "i" } },
+        { lastName: { $regex: content, $options: "i" } },
+      ],
+    });
+
+    if (!users.length)
+      return res.status(404).json({ message: "No users found" });
+
+    return res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ message: err });
   }
 };
 
@@ -113,7 +135,7 @@ exports.changePassword = async (req, res) => {
     const { password } = req.body;
     const isSamePassword = await bcrypt.compare(password, user.password);
     if (isSamePassword)
-      return res.status(400).json({ message: 'Password is same' });
+      return res.status(400).json({ message: "Password is same" });
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
     const result = await User.findByIdAndUpdate(
@@ -201,7 +223,7 @@ exports.deleteAvatar = async (req, res) => {
   try {
     const { id } = req.params;
     const noAvatar =
-      'https://i0.wp.com/digitalhealthskills.com/wp-content/uploads/2022/11/3da39-no-user-image-icon-27.png?fit=500%2C500&ssl=1';
+      "https://i0.wp.com/digitalhealthskills.com/wp-content/uploads/2022/11/3da39-no-user-image-icon-27.png?fit=500%2C500&ssl=1";
     const deleteAvatar = await User.findByIdAndUpdate(
       id,
       {
