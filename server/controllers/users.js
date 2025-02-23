@@ -41,7 +41,7 @@ exports.getUserFriends = async (req, res) => {
 };
 exports.searchUser = async (req, res) => {
   try {
-    const { content } = req.body;
+    const { content, id } = req.body;
     console.log(content);
     if (!content)
       return res.status(400).json({ message: "Search content is empty" });
@@ -51,6 +51,7 @@ exports.searchUser = async (req, res) => {
         { firstName: { $regex: content, $options: "i" } },
         { lastName: { $regex: content, $options: "i" } },
       ],
+      _id: { $ne: id },
     });
 
     if (!users.length)

@@ -1,10 +1,13 @@
-import React from 'react';
-import { useGoogleLogin } from '@react-oauth/google';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLogin } from 'state';
-import jwt_Decode from 'jwt-decode';
-
+import React from "react";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogin } from "state";
+import jwt_Decode from "jwt-decode";
+import { Button, Box } from "@mui/material";
+import { FaGoogle } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import FlexBetween from "components/FlexBetween";
 const Oauth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,7 +19,7 @@ const Oauth = () => {
         const res = await fetch(
           `https://www.googleapis.com/oauth2/v3/userinfo`,
           {
-            method: 'GET',
+            method: "GET",
             headers: {
               Authorization: `Bearer ${response.access_token}`,
             },
@@ -31,8 +34,8 @@ const Oauth = () => {
   });
   const sendData = async (values) => {
     const response = await fetch(`${apiUrl}/auth/oauth/google`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
     const loggedIn = await response.json();
@@ -43,10 +46,23 @@ const Oauth = () => {
           token: loggedIn.token,
         })
       );
-      navigate('/home');
+      navigate("/home");
     }
   };
-  return <button onClick={() => googleLogin()}>Google </button>;
+  return (
+    <FlexBetween>
+      <Button
+        variant="outlined"
+        startIcon={<FaGoogle />}
+        onClick={() => googleLogin()}
+      >
+        Connect with Google{" "}
+      </Button>
+      <Button variant="outlined" startIcon={<FaXTwitter />}>
+        Connect with X
+      </Button>
+    </FlexBetween>
+  );
 };
 
 export default Oauth;

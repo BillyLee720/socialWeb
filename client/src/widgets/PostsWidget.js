@@ -9,8 +9,6 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const token = useSelector((state) => state.token);
   const apiUrl = useSelector((state) => state.host);
 
-  console.log(posts);
-
   const getPosts = async () => {
     const response = await fetch(`${apiUrl}/posts`, {
       method: "GET",

@@ -1,4 +1,10 @@
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useTheme,
+  useMediaQuery,
+  Divider,
+} from "@mui/material";
 import Friend from "components/Friend";
 import { useEffect, useState } from "react";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -12,11 +18,13 @@ const SearchPage = () => {
 
   const { palette } = useTheme();
   const token = useSelector((state) => state.token);
+  const { _id } = useSelector((state) => state.user);
   const apiUrl = useSelector((state) => state.host);
 
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
   const [searchResults, setSearchResults] = useState([]);
+  const [noResults, setNoResults] = useState(false);
   const SearchResults = async () => {
     const response = await fetch(`${apiUrl}/users/search`, {
       method: "POST",
@@ -24,11 +32,17 @@ const SearchPage = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ content: query }),
+      body: JSON.stringify({ content: query, id: _id }),
     });
     const results = await response.json();
-    setSearchResults(results);
-    console.log(results);
+    if (response.ok) {
+      setNoResults(false);
+      setSearchResults(results);
+    } else {
+      setNoResults(true);
+      setSearchResults([]);
+    }
+    console.log(results.length, noResults);
   };
   useEffect(() => {
     SearchResults();
@@ -55,7 +69,10 @@ const SearchPage = () => {
             Search Results
           </Typography>
           <Box display="flex" flexDirection="column" gap="1.5rem">
-            {Array.isArray(searchResults) &&
+            {noResults ? (
+              <Typography>No users found.</Typography>
+            ) : (
+              Array.isArray(searchResults) &&
               searchResults.map((user) => (
                 <Friend
                   key={user._id}
@@ -64,7 +81,8 @@ const SearchPage = () => {
                   subtitle={user.location}
                   userPicturePath={user.picturePath}
                 />
-              ))}
+              ))
+            )}
           </Box>
         </WidgetWrapper>
       </Box>

@@ -9,6 +9,8 @@ import ChangePassword from "Pages/editPage/Password";
 import EditLocation from "Pages/editPage/Location";
 import EditOccupation from "Pages/editPage/Occupation";
 import SearchPage from "Pages/searchPage/search";
+import PrivacyPolicy from "Pages/privacy/PrivacyPolicy";
+import TermsOfService from "Pages/privacy/TermsOfService";
 import { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -73,6 +75,8 @@ function App() {
               path="/search"
               element={isAuth ? <SearchPage /> : <Navigate to="/" />}
             />
+            <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+            <Route path="/TermsOfService" element={<TermsOfService />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

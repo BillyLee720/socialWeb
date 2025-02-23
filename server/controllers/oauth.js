@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const Platform = require('../models/Platform');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const Platform = require("../models/Platform");
 
 // google
 
@@ -30,7 +30,9 @@ exports.google = async (req, res) => {
       });
       const saveUser = await newUser.save();
       const user = await User.findOne({ email: email });
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
 
       //add new platform
       const newPlatform = new Platform({
@@ -43,5 +45,12 @@ exports.google = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+exports.twitterx = async (req, res) => {
+  try {
+    console.log("test x");
+  } catch (err) {
+    console.log(err);
   }
 };

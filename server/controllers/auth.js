@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const Platform = require('../models/Platform');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const Platform = require("../models/Platform");
 /* REGISTER USER */
 
 exports.register = async (req, res) => {
@@ -20,7 +20,7 @@ exports.register = async (req, res) => {
     //檢查email
     const existEmail = await User.findOne({ email: email });
     if (existEmail) {
-      return res.status(400).json({ error: 'Email already registered' });
+      return res.status(400).json({ error: "Email already registered" });
     }
     //加密
     const salt = await bcrypt.genSalt();
@@ -52,12 +52,14 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     //檢查email
-    if (!user) return res.status(400).json({ msg: 'User does not exist.' });
+    if (!user) return res.status(400).json({ msg: "User does not exist." });
     //核對密碼
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
     delete user.password;
     res.status(200).json({ token, user });
   } catch (err) {
