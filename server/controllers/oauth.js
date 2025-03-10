@@ -47,7 +47,7 @@ exports.google = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-exports.twitterx = async (req, res) => {
+exports.facebook = async (req, res) => {
   try {
     console.log("test x");
   } catch (err) {
